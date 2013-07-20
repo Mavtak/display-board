@@ -14,7 +14,7 @@ namespace DisplayBoard.Controllers
             return View();
         }
 
-        public ActionResult Create(string name)
+        public ActionResult Create(string name, string secret)
         {
             var path = ConfigurationPath(name);
             if (System.IO.File.Exists(path))
@@ -25,6 +25,7 @@ namespace DisplayBoard.Controllers
 
             var model = new DisplayBoardConfigurationModel
             {
+                Secret = secret,
                 Slides = new List<SlideConfigurationModel>()
             };
 
@@ -37,6 +38,7 @@ namespace DisplayBoard.Controllers
         public ActionResult Edit(string name)
         {
             var model = GetConfiguration(name);
+            model.Secret = string.Empty;
 
             return View(model);
         }
@@ -44,6 +46,13 @@ namespace DisplayBoard.Controllers
         [HttpPost]
         public ActionResult Edit(string name, DisplayBoardConfigurationModel model)
         {
+            var savedModel = GetConfiguration(name);
+
+            if (!String.Equals(savedModel.Secret, model.Secret))
+            {
+                throw new Exception("Shut up!");
+            }
+
             SaveConfiguration(name, model);
 
             return RedirectToAction("Display", new {name});
@@ -52,6 +61,7 @@ namespace DisplayBoard.Controllers
         public ActionResult Display(string name)
         {
             var model = GetConfiguration(name);
+            model.Secret = null;
 
             return View(model);
         }

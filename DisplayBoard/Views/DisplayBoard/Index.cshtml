@@ -5,6 +5,13 @@
 }
 
 @using(Html.BeginForm("Create", "DisplayBoard")){
-  <input name="name" type="text"/>
+    <p>
+        name: <input name="name" type="text"/>
+    </p>
+    
+    <p>
+        secret: <input name="secret" type="text" />
+    </p>
+    
   <button type="submit">create</button>
 }

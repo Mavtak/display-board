@@ -22,6 +22,10 @@
     <button id="add">Add</button>
 </p>
 
+<p>
+    Secret: <input id="secret" type="text" />
+</p>
+
 <button id="submit">Save</button>
 
 <style type="text/css">
@@ -35,6 +39,7 @@
 
     $slideTemplate = $('#slide-template');
     $slides = $('#slides');
+    $secret = $('#secret');
     
     for (var index in data.slides) {
         var slideData = data.slides[index];
@@ -66,6 +71,8 @@
             console.log(slideData);
             data.slides.push(slideData);
         });
+
+        data.secret = $secret.val();
 
         var apiUrl = '';
         
