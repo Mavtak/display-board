@@ -17,9 +17,8 @@ $(function(){
       content[0].src = data.url
     }
     
-    var overlay = result.children('.overlay');
-    
-    overlay.html(data.overlay);
+    var $title = $('.title', result);
+    $title.html(data.title);
     
     result.appendTo($deck);
     
@@ -32,22 +31,22 @@ $(function(){
   
   createSlide({
       url: "examples/1.html",
-      overlay: "Slide 1"
+      title: "Slide 1"
   });
   
   createSlide({
       url: "examples/2.html",
-      overlay: "Slide 2"
+      title: "Slide 2"
   });
   
   createSlide({
       url: "examples/3.html",
-      overlay: "Slide 3"
+      title: "Slide 3"
   });
   
   createSlide({
       url: "examples/4.html",
-      overlay: "Slide 4"
+      title: "Slide 4"
   });
   
   function setup() {
@@ -93,7 +92,7 @@ $(function(){
       width: "90%",
       height: "90%",
       margin: "2.5%",
-      zoom: .9
+      zoom: .8
     };
     
     var zoomIn = {
@@ -103,21 +102,29 @@ $(function(){
       zoom: 1
     };
     
-    $current.animate(zoomOut)
-    .animate({
-      left: "-100%"
-    },{
-      duration: 1000
-    }).animate(zoomIn, afterAnimation);
+    $overlays = $('.overlay', $stage);
     
-    $next.animate(zoomOut).animate({
-      left: 0
-    },{
-      duration: 1000
-    }).animate(zoomIn)
-    .done(function(){
-      alert('hi');
-    });
+    var step1 = function() {
+      $current.animate(zoomOut, 1000);
+      $next.animate(zoomOut, 1000);
+      $overlays.animate({opacity: 1}, 1000);
+    }
+    step1();
+    
+    var step2 = function() {
+      $current.animate({left: "-100%"}, 1000);
+      $next.animate({left: 0}, 1000);
+    }
+    setTimeout(step2, 1000);
+    
+    var step3 = function() {
+      $current.animate(zoomIn, 1000);
+      $next.animate(zoomIn, 1000)
+      $overlays.animate({opacity: 0}, 1000);
+    }
+    setTimeout(step3, 2000);
+    
+    setTimeout(afterAnimation, 3000);
   }
 
   $(document).ready(function(){
