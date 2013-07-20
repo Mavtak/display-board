@@ -1,0 +1,55 @@
+*
+{
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
+
+body
+{
+  overflow: hidden;
+}
+
+#slide-template,
+#slide-deck
+{
+  display: none;
+}
+
+#stage .slide
+{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#stage .slide .background,
+#stage .slide .content,
+#stage .slide .overlay
+{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 500%;
+}
+
+#stage .slide .background
+{
+	text-align: left;
+}
+
+#stage .slide .content
+{
+}
+
+#stage .slide .overlay
+{
+	text-align: right;
+}
+
+#stage .slide.next
+{
+  display: none;
+}
