@@ -18,6 +18,10 @@
 
 <div id="slides"></div>
 
+<p>
+    <button id="add">Add</button>
+</p>
+
 <button id="submit">Save</button>
 
 <style type="text/css">
@@ -44,6 +48,11 @@
 
         $slide.appendTo($slides);
     }
+
+    $('#add').click(function() {
+        var $slide = $slideTemplate.children().clone();
+        $slide.appendTo($slides);
+    });
     
     $('#submit').click(function () {
         console.log('click!');
