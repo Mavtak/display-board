@@ -15,6 +15,25 @@ namespace DisplayBoard.Controllers
 
         public ActionResult Create(string name)
         {
+            var path = ConfigurationPath(name);
+            if (System.IO.File.Exists(path))
+            {
+                //TODO: throw better exception
+                throw new Exception("Display Board already exists.");
+            }
+
+            var model = new DisplayBoardConfigurationModel
+            {
+                Slides = new List<SlideConfigurationModel>()
+            };
+
+            SaveConfiguration(name, model);
+
+            return RedirectToAction("Edit");
+        }
+
+        public ActionResult Edit(string name)
+        {
             throw new NotImplementedException();
         }
 
@@ -44,6 +63,13 @@ namespace DisplayBoard.Controllers
             var result = configurationContent.FromJson<DisplayBoardConfigurationModel>();
 
             return result;
+        }
+
+        private void SaveConfiguration(string name, DisplayBoardConfigurationModel configuration)
+        {
+            var path = ConfigurationPath(name);
+            var data = configuration.ToJson();
+            System.IO.File.WriteAllText(path, data);
         }
     }
 }
