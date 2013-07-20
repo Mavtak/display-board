@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using DisplayBoard.Helpers;
 using DisplayBoard.Models;
@@ -7,6 +8,16 @@ namespace DisplayBoard.Controllers
 {
     public class DisplayBoardController : Controller
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Create(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public ActionResult Display(string name)
         {
             var model = GetConfiguration(name);

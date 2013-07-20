@@ -14,6 +14,12 @@ namespace DisplayBoard
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "Homepage",
+                url: "",
+                defaults: new { controller = "DisplayBoard", action = "Index" }
+            );
+
+            routes.MapRoute(
                 name: "DisplayBoard",
                 url: "{name}",
                 defaults: new { controller = "DisplayBoard", action = "Display"}

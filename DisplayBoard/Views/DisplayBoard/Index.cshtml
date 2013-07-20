@@ -1,0 +1,10 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Display Board";
+}
+
+@using(Html.BeginForm("Create", "DisplayBoard")){
+  <input name="name" type="text"/>
+  <button type="submit">create</button>
+}
