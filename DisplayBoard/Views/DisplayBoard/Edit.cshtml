@@ -1,0 +1,67 @@
+﻿@model DisplayBoardConfigurationModel
+
+@{
+    ViewBag.Title = "title";
+}
+
+<script id="configuration" type="text/json">@Html.Raw(Model.ToJson())</script>
+
+<div id="slide-template">
+    <p class="slide">
+        Url: <input class="url" type="text">
+        <br />
+        Title: <input class="title" type="text"/>
+    </p>
+</div>
+
+<div id="slides"></div>
+
+<button id="submit">Save</button>
+
+<style type="text/css">
+    #slide-template
+    {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+    var data = JSON.parse($('#configuration').html());
+
+    $slideTemplate = $('#slide-template');
+    $slides = $('#slides');
+    
+    for (var index in data.slides) {
+        var slideData = data.slides[index];
+
+        $slide = $slideTemplate.children().clone();
+        $('.url', $slide).val(slideData.url);
+        $('.title', $slide).val(slideData.title);
+        $slide.appendTo($slides);
+    }
+    
+    $('#submit').click(function () {
+        console.log('click!');
+        data.slides = [];
+        $('.slide', $slides).each(function() {
+            var slideData = {
+                url: $('.url', $(this)).val(),
+                title: $('.title', $(this)).val()
+            };
+
+            console.log(slideData);
+            data.slides.push(slideData);
+        });
+
+        var apiUrl = '';
+        
+        $.ajax({
+            type: 'POST',
+            url: apiUrl,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            success: function() {
+                alert('done!');
+            }});
+    });
+</script>

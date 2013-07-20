@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Web.Routing;
 using DisplayBoard.Helpers;
 using DisplayBoard.Models;
 
@@ -29,12 +30,23 @@ namespace DisplayBoard.Controllers
 
             SaveConfiguration(name, model);
 
-            return RedirectToAction("Edit");
+            return RedirectToAction("Edit", new {name});
         }
 
+        [HttpGet]
         public ActionResult Edit(string name)
         {
-            throw new NotImplementedException();
+            var model = GetConfiguration(name);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(string name, DisplayBoardConfigurationModel model)
+        {
+            SaveConfiguration(name, model);
+
+            return RedirectToAction("Display", new {name});
         }
 
         public ActionResult Display(string name)

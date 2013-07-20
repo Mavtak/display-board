@@ -20,6 +20,13 @@ namespace DisplayBoard
             );
 
             routes.MapRoute(
+                name: "Actions",
+                url: "{Action}/{name}",
+                defaults: new { controller = "DisplayBoard"},
+                constraints:new {Action = "(Create|Edit)"}
+            );
+
+            routes.MapRoute(
                 name: "DisplayBoard",
                 url: "{name}",
                 defaults: new { controller = "DisplayBoard", action = "Display"}
