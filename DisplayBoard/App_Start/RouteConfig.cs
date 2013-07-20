@@ -21,21 +21,9 @@ namespace DisplayBoard
 
             routes.MapRoute(
                 name: "Actions",
-                url: "{Action}/{name}",
-                defaults: new { controller = "DisplayBoard"},
-                constraints:new {Action = "(Create|Edit)"}
-            );
-
-            routes.MapRoute(
-                name: "DisplayBoard",
-                url: "{name}",
-                defaults: new { controller = "DisplayBoard", action = "Display"}
-            );
-
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{name}/{Action}",
+                defaults: new { controller = "DisplayBoard", Action = "Display"},
+                constraints:new {Action = "(Create|Edit|Display)"}
             );
         }
     }
