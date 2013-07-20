@@ -11,6 +11,8 @@
         Url: <input class="url" type="text">
         <br />
         Title: <input class="title" type="text"/>
+        <br />
+        <button class="remove">Remove</button>
     </p>
 </div>
 
@@ -33,9 +35,13 @@
     for (var index in data.slides) {
         var slideData = data.slides[index];
 
-        $slide = $slideTemplate.children().clone();
+        var $slide = $slideTemplate.children().clone();
         $('.url', $slide).val(slideData.url);
         $('.title', $slide).val(slideData.title);
+        $('.remove', $slide).click(function() {
+            $(this).parent().remove();
+        });
+
         $slide.appendTo($slides);
     }
     
