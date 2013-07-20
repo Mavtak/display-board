@@ -29,20 +29,11 @@ $(function(){
       overlay: "Welcome to Display Board"
   }).addClass('initial').appendTo($deck);
   
-  var slides = [{
-      url: 'examples/1.html',
-      title: 'Slide 1'
-    },{
-      url: 'examples/2.html',
-      title: 'Slide 2'
-    },{
-      url: 'examples/3.html',
-      title: 'Slide 3'
-    },{
-      url: 'examples/4.html',
-      title: 'Slide 4'
-    }];
-
+  var jsonText = $('#configuration').html();
+  console.log(jsonText);
+  var data = JSON.parse(jsonText);
+  var slides = data.slides;
+  
   for (var i in slides) {
     createSlide(slides[i]);
   }
