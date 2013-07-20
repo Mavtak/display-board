@@ -31,47 +31,101 @@ $(function(){
   }).addClass('initial').appendTo($deck);
   
   createSlide({
-      url: "http://zombo.com",
+      url: "examples/1.html",
       overlay: "Slide 1"
   });
-    
+  
   createSlide({
-    url: "http://isitchristmas.com/",
-    overlay: "Slide 2"
+      url: "examples/2.html",
+      overlay: "Slide 2"
   });
   
   createSlide({
-    url: "http://cupcakeipsum.com/",
-    overlay: "Slide 3"
-  });  
+      url: "examples/3.html",
+      overlay: "Slide 3"
+  });
+  
+  createSlide({
+      url: "examples/4.html",
+      overlay: "Slide 4"
+  });
   
   function setup() {
-    $first = $deck.children().first();
-    $first.addClass('next');
+    $initial = $deck.children().first();
+    $initial.addClass('current');
+    $initial.appendTo($stage);
     
-    $first.appendTo($stage);
+    $next = $deck.children().first();
+    $next.addClass('next');
+    $next.appendTo($stage);
+    
   }
   
-  function cycle() {
+  function transitionAnimation($current, $next) {
+      
+  }
+  
+  function cycle(time) {
     $current = $stage.children('.current');
     $next = $stage.children('.next');
-        
-    $current.removeClass('current');
-    $next.removeClass('next').addClass('current');
-    if($current.hasClass('initial')) {
-      $current.remove();
-    } else {
-      $current.appendTo($deck);
+    
+    var afterAnimation = function() {
+      console.log('hi');
+      $current.removeClass('current');
+      $next.removeClass('next').addClass('current');
+      if($current.hasClass('initial')) {
+        $current.remove();
+      } else {
+        $current.appendTo($deck);
+      };
+      
+      $newNext = $deck.children().first();
+      $newNext.addClass('next');
+      $newNext.removeAttr('style');
+      $newNext.appendTo($stage);
+      
+      setTimeout(function(){
+        cycle(time);
+      }, time);
     };
     
-    $newNext = $deck.children().first();
-    $newNext.addClass('next');
-    $newNext.appendTo($stage);
+    var zoomOut = {
+      width: "90%",
+      height: "90%",
+      margin: "2.5%",
+      zoom: .9
+    };
+    
+    var zoomIn = {
+      width: "100%",
+      height: "100%",
+      margin: 0,
+      zoom: 1
+    };
+    
+    $current.animate(zoomOut)
+    .animate({
+      left: "-100%"
+    },{
+      duration: 1000
+    }).animate(zoomIn, afterAnimation);
+    
+    $next.animate(zoomOut).animate({
+      left: 0
+    },{
+      duration: 1000
+    }).animate(zoomIn)
+    .done(function(){
+      alert('hi');
+    });
   }
 
   $(document).ready(function(){
     setup();
-    setInterval(cycle, 5000);
+    
+    setTimeout(function(){
+      cycle(5000);
+    }, 1000);
   });
 
 });
