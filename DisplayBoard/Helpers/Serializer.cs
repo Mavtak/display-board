@@ -16,5 +16,12 @@ namespace DisplayBoard.Helpers
 
             return result;
         }
+
+        public static T FromJson<T>(this string data)
+        {
+            var result = JsonConvert.DeserializeObject<T>(data);
+
+            return result;
+        }
     }
 }

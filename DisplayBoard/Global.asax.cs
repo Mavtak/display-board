@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.IO;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using DisplayBoard.Helpers;
 
 namespace DisplayBoard
 {
@@ -19,6 +17,12 @@ namespace DisplayBoard
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            var configPath = Server.MapPath(Constants.DisplayBoardConfigurationPath);
+            if (!Directory.Exists(configPath))
+            {
+                Directory.CreateDirectory(configPath);
+            }
         }
     }
 }
