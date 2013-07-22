@@ -11,13 +11,13 @@ $(function(){
     slideCount++;
     var result = $('#slide-template').children('.slide').clone();
     result.attr('id', id);
-    
-    if(data.url) {
-      var content = result.children('.content');
-      content[0].src = data.url
+
+    if (data.url) {
+        var content = $('.content', result);
+        content[0].src = data.url;
     }
-    
-    var $title = $('.title', result);
+
+      var $title = $('.title', result);
     $title.html(data.title);
     
     result.appendTo($deck);
@@ -78,24 +78,22 @@ $(function(){
     };
     
     var zoomOut = {
-      width: "90%",
-      height: "90%",
-      margin: "2.5%",
-      zoom: .8
+        width: "80%",
+        height: "80%",
+        margin: "5%"
     };
     
     var zoomIn = {
-      width: "100%",
-      height: "100%",
-      margin: 0,
-      zoom: 1
+        width: "100%",
+        height: "100%",
+        margin: "0%"
     };
     
-    $overlays = $('.overlay', $stage);
+    var $overlays = $('.overlay', $stage);
+    var $frames = $('.frame', $stage);
     
     var step1 = function() {
-      $current.animate(zoomOut, 1000);
-      $next.animate(zoomOut, 1000);
+      $frames.animate(zoomOut, 1000);
       $overlays.animate({opacity: 1}, 1000);
     }
     step1();
@@ -107,8 +105,7 @@ $(function(){
     setTimeout(step2, 1000);
     
     var step3 = function() {
-      $current.animate(zoomIn, 1000);
-      $next.animate(zoomIn, 1000)
+      $frames.animate(zoomIn, 1000);
       $overlays.animate({opacity: 0}, 1000);
     }
     setTimeout(step3, 2000);

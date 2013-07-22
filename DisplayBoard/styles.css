@@ -26,6 +26,13 @@ body
   position: absolute;
 }
 
+#stage .slide .frame
+{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
 #stage .slide .background,
 #stage .slide .content,
 #stage .slide .overlay
