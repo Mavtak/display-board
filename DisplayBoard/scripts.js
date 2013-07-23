@@ -78,9 +78,9 @@ $(function(){
     };
     
     var zoomOut = {
-        width: "80%",
-        height: "80%",
-        margin: "5%"
+        width: "90%",
+        height: "90%",
+        margin: "2.5%"
     };
     
     var zoomIn = {
