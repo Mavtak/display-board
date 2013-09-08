@@ -48,7 +48,7 @@ namespace DisplayBoard.Controllers
         {
             var savedModel = GetConfiguration(name);
 
-            if (!String.Equals(savedModel.Secret, model.Secret))
+            if (!String.Equals(savedModel.Secret??string.Empty, model.Secret??string.Empty))
             {
                 throw new Exception("Shut up!");
             }
