@@ -29,7 +29,7 @@ namespace DisplayBoard
                 name: "Actions",
                 url: "{name}/{Action}",
                 defaults: new { controller = "DisplayBoard", Action = "Display"},
-                constraints:new {Action = "(Create|Edit|Display)"}
+                constraints:new {Action = "(Create|Edit|Display|Data)"}
             );
         }
     }

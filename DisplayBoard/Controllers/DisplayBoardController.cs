@@ -66,6 +66,14 @@ namespace DisplayBoard.Controllers
             return View(model);
         }
 
+        public ActionResult Data(string name)
+        {
+            var model = GetConfiguration(name);
+            model.Secret = null;
+
+            return Content(model.ToJson(), "application/json");
+        }
+
         private string ConfigurationPath(string name)
         {
             var result = Request.MapPath(Constants.DisplayBoardConfigurationPath) + "/" + name + ".js";
