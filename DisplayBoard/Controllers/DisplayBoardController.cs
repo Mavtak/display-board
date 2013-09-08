@@ -38,7 +38,6 @@ namespace DisplayBoard.Controllers
         public ActionResult Edit(string name)
         {
             var model = GetConfiguration(name);
-            model.Secret = string.Empty;
 
             return View(model);
         }
@@ -46,7 +45,7 @@ namespace DisplayBoard.Controllers
         [HttpPost]
         public ActionResult Edit(string name, DisplayBoardConfigurationModel model)
         {
-            var savedModel = GetConfiguration(name);
+            var savedModel = GetConfiguration(name, true);
 
             if (!String.Equals(savedModel.Secret??string.Empty, model.Secret??string.Empty))
             {
@@ -61,7 +60,6 @@ namespace DisplayBoard.Controllers
         public ActionResult Display(string name)
         {
             var model = GetConfiguration(name);
-            model.Secret = null;
 
             return View(model);
         }
@@ -69,7 +67,6 @@ namespace DisplayBoard.Controllers
         public ActionResult Data(string name)
         {
             var model = GetConfiguration(name);
-            model.Secret = null;
 
             return Content(model.ToJson(), "application/json");
         }
@@ -80,7 +77,7 @@ namespace DisplayBoard.Controllers
             return result;
         }
 
-        private DisplayBoardConfigurationModel GetConfiguration(string name)
+        private DisplayBoardConfigurationModel GetConfiguration(string name, bool includeSecret = false)
         {
             var path = ConfigurationPath(name);
             if (!System.IO.File.Exists(path))
@@ -91,6 +88,11 @@ namespace DisplayBoard.Controllers
             var configurationContent = System.IO.File.ReadAllText(path);
 
             var result = configurationContent.FromJson<DisplayBoardConfigurationModel>();
+
+            if (includeSecret)
+            {
+                result.Secret = null;
+            }
 
             return result;
         }
