@@ -12,6 +12,8 @@
         <br />
         Title: <input class="title" type="text"/>
         <br />
+        Timeout: <input class="timeout" type="text"/>
+        <br />
         <button class="remove">Remove</button>
     </p>
 </div>
@@ -47,6 +49,7 @@
         var $slide = $slideTemplate.children().clone();
         $('.url', $slide).val(slideData.url);
         $('.title', $slide).val(slideData.title);
+        $('.timeout', $slide).val(slideData.timeout);
         $('.remove', $slide).click(function() {
             $(this).parent().remove();
         });
@@ -65,7 +68,8 @@
         $('.slide', $slides).each(function() {
             var slideData = {
                 url: $('.url', $(this)).val(),
-                title: $('.title', $(this)).val()
+                title: $('.title', $(this)).val(),
+                timeout: $('.timeout', $(this)).val()
             };
 
             console.log(slideData);

@@ -4,6 +4,7 @@ $(function(){
   var slideCount = 0;
   var $stage = $('#stage');
   var $deck = $('#slide-deck');
+  var slideData = [];
   
   function createSlide(data)
   {
@@ -17,10 +18,11 @@ $(function(){
         content[0].src = data.url;
     }
 
-      var $title = $('.title', result);
+    var $title = $('.title', result);
     $title.html(data.title);
     
     result.appendTo($deck);
+    slideData[id] = data;
     
     return result;
   }
@@ -28,16 +30,16 @@ $(function(){
   createSlide({
       overlay: "Welcome to Display Board"
   }).addClass('initial').appendTo($deck);
-  
+
   var jsonText = $('#configuration').html();
-  console.log(jsonText);
+  
   var data = JSON.parse(jsonText);
   var slides = data.slides;
   
   for (var i in slides) {
     createSlide(slides[i]);
   }
-  
+
   function setup() {
     $initial = $deck.children().first();
     $initial.addClass('current');
@@ -53,12 +55,26 @@ $(function(){
       
   }
   
-  function cycle(time) {
+  function getSlideData($slide) {
+      var nextId = $slide.attr('id');
+      var data = slideData[nextId];
+
+      return data;
+  }
+
+  function getTimeout($slide) {
+      var slideData = getSlideData;
+      var timeout = slideData.timeout || 5;
+      timeout = timeout * 1000;
+      
+      return timeout;
+  }
+  
+  function cycle() {
     $current = $stage.children('.current');
     $next = $stage.children('.next');
     
     var afterAnimation = function() {
-      console.log('hi');
       $current.removeClass('current');
       $next.removeClass('next').addClass('current');
       if($current.hasClass('initial')) {
@@ -71,10 +87,11 @@ $(function(){
       $newNext.addClass('next');
       $newNext.removeAttr('style');
       $newNext.appendTo($stage);
-      
+
+      var timeout = getTimeout($next);
       setTimeout(function(){
-        cycle(time);
-      }, time);
+          cycle();
+      }, timeout);
     };
     
     var zoomOut = {
@@ -116,8 +133,8 @@ $(function(){
   $(document).ready(function(){
     setup();
     
-    setTimeout(function(){
-      cycle(5000);
+    setTimeout(function () {
+      cycle();
     }, 1000);
   });
 
