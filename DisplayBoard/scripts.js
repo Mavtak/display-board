@@ -27,29 +27,40 @@ $(function(){
     return result;
   }
   
-  createSlide({
-      overlay: "Welcome to Display Board"
-  }).addClass('initial').appendTo($deck);
+  function processSlides(slides, callback) {
+      for (var i in slides) {
+          createSlide(slides[i]);
+      }
 
-  var jsonText = $('#configuration').html();
-  
-  var data = JSON.parse(jsonText);
-  var slides = data.slides;
-  
-  for (var i in slides) {
-    createSlide(slides[i]);
+      callback();
   }
 
   function setup() {
-    $initial = $deck.children().first();
-    $initial.addClass('current');
-    $initial.appendTo($stage);
-    
-    $next = $deck.children().first();
-    $next.addClass('next');
-    $next.appendTo($stage);
-    
+    createSlide({
+        overlay: "Welcome to Display Board"
+    }).addClass('initial').appendTo($deck);
+
+    var jsonText = $('#configuration').html();
+
+    var data = JSON.parse(jsonText);
+      
+    var slides = data.slides;
+
+    processSlides(slides, function () {
+        $initial = $deck.children().first();
+        $initial.addClass('current');
+        $initial.appendTo($stage);
+
+        $next = $deck.children().first();
+        $next.addClass('next');
+        $next.appendTo($stage);
+        
+        setTimeout(function () {
+            cycle();
+        }, 1000);
+    });
   }
+  
   
   function transitionAnimation($current, $next) {
       
@@ -132,10 +143,6 @@ $(function(){
 
   $(document).ready(function(){
     setup();
-    
-    setTimeout(function () {
-      cycle();
-    }, 1000);
   });
 
 });
