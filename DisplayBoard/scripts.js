@@ -28,11 +28,42 @@ $(function(){
   }
   
   function processSlides(slides, callback) {
-      for (var i in slides) {
-          createSlide(slides[i]);
+      if (slides.length == 0) {
+          callback();
+          return;
       }
 
-      callback();
+      var slide = slides.shift();
+
+      if (slide.url.indexOf('deck:') == 0) {
+          var name = slide.url.split(':')[1];
+          loadDeck(name, function() {
+
+              processSlides(slides, callback);
+          });
+      } else {
+        createSlide(slide);
+
+        processSlides(slides, callback);
+      }
+  }
+
+  function loadDeck(name, callback) {
+      $.ajax({
+          method: 'GET',
+          url: name + '/data',
+          success: function (data) {
+              var slides = data.slides;
+              processSlides(slides, callback);
+          },
+          failure: function () {
+              createSlide({
+                  title: 'failed to load deck named "' + name + '".'
+              });
+
+              callback();
+          }
+      });
   }
 
   function setup() {
