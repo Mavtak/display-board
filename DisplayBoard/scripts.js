@@ -28,14 +28,14 @@ $(function(){
   }
   
   function processSlides(slides, callback) {
-      if (slides.length == 0) {
+      if (slides.length === 0) {
           callback();
           return;
       }
 
       var slide = slides.shift();
 
-      if (slide.url.indexOf('deck:') == 0) {
+      if (slide.url.indexOf('deck:') === 0) {
           var name = slide.url.split(':')[1];
           loadDeck(name, function() {
 
@@ -123,7 +123,7 @@ $(function(){
         $current.remove();
       } else {
         $current.appendTo($deck);
-      };
+      }
       
       $newNext = $deck.children().first();
       $newNext.addClass('next');
@@ -154,19 +154,19 @@ $(function(){
     var step1 = function() {
       $frames.animate(zoomOut, 1000);
       $overlays.animate({opacity: 1}, 1000);
-    }
+    };
     step1();
-    
+
     var step2 = function() {
       $current.animate({left: "-100%"}, 1000);
       $next.animate({left: 0}, 1000);
-    }
+    };
     setTimeout(step2, 1000);
-    
+
     var step3 = function() {
       $frames.animate(zoomIn, 1000);
       $overlays.animate({opacity: 0}, 1000);
-    }
+    };
     setTimeout(step3, 2000);
     
     setTimeout(afterAnimation, 3000);
