@@ -75,6 +75,11 @@ $(function(){
 
     var data = JSON.parse(jsonText);
       
+    if (data == null) {
+        $stage.html('<h1>deck not found</h1>');
+        return;
+    }
+
     var slides = data.slides;
 
     processSlides(slides, function () {
