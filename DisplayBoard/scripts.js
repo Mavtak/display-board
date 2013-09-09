@@ -105,7 +105,7 @@ $(function(){
   }
 
   function getTimeout($slide) {
-      var slideData = getSlideData;
+      var slideData = getSlideData($slide);
       var timeout = slideData.timeout || 5;
       timeout = timeout * 1000;
       
