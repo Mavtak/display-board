@@ -79,6 +79,13 @@
         $slide.appendTo($slides);
     });
 
+    $('input[type=text], input[type=password]').bind("keypress", function (e) {
+        if (e.keyCode == 13) {
+            $('#submit').trigger('click');
+            return false;
+        }
+    });
+
     $('#submit').click(function () {
         $('#submitPanel').attr('class', 'saving');
         data.slides = [];
