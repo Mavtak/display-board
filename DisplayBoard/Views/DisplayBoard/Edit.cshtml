@@ -28,12 +28,29 @@
     Secret: <input id="secret" type="password" />
 </p>
 
-<button id="submit">Save</button>
-
+<div id="submitPanel">
+    <button id="submit">Save</button>
+    <span class="saving message">saving...</span>
+    <span class="success message">success!</span>
+    <span class="error message">error</span>
+</div>
 <style type="text/css">
-    #slide-template
+    #slide-template,
+    #submitPanel .message
     {
         display: none;
+    }
+
+    #submitPanel .message
+    {
+        display: none;
+    }
+
+    #submitPanel.saving .saving.message,
+    #submitPanel.success .success.message,
+    #submitPanel.error .error.message
+    {
+        display: inline;
     }
 </style>
 <script type="text/javascript">
@@ -42,7 +59,7 @@
     $slideTemplate = $('#slide-template');
     $slides = $('#slides');
     $secret = $('#secret');
-    
+
     for (var index in data.slides) {
         var slideData = data.slides[index];
 
@@ -50,22 +67,22 @@
         $('.url', $slide).val(slideData.url);
         $('.title', $slide).val(slideData.title);
         $('.timeout', $slide).val(slideData.timeout);
-        $('.remove', $slide).click(function() {
+        $('.remove', $slide).click(function () {
             $(this).parent().remove();
         });
 
         $slide.appendTo($slides);
     }
 
-    $('#add').click(function() {
+    $('#add').click(function () {
         var $slide = $slideTemplate.children().clone();
         $slide.appendTo($slides);
     });
-    
+
     $('#submit').click(function () {
-        console.log('click!');
+        $('#submitPanel').attr('class', 'saving');
         data.slides = [];
-        $('.slide', $slides).each(function() {
+        $('.slide', $slides).each(function () {
             var slideData = {
                 url: $('.url', $(this)).val(),
                 title: $('.title', $(this)).val(),
@@ -79,14 +96,18 @@
         data.secret = $secret.val();
 
         var apiUrl = '';
-        
+
         $.ajax({
             type: 'POST',
             url: apiUrl,
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
-            success: function() {
-                alert('done!');
-            }});
+            success: function () {
+                $('#submitPanel').attr('class', 'success');
+            },
+            error: function () {
+                $('#submitPanel').attr('class', 'error');
+            }
+        });
     });
 </script>
