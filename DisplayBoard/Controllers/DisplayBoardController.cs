@@ -89,7 +89,7 @@ namespace DisplayBoard.Controllers
 
             var result = configurationContent.FromJson<DisplayBoardConfigurationModel>();
 
-            if (includeSecret)
+            if (!includeSecret)
             {
                 result.Secret = null;
             }
