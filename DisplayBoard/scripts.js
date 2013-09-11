@@ -34,11 +34,11 @@ $(function(){
       }
 
       var slide = slides.shift();
+      console.log(slide);
 
-      if (slide.url.indexOf('deck:') === 0) {
+      if (slide.url && slide.url.indexOf('deck:') === 0) {
           var name = slide.url.split(':')[1];
           loadDeck(name, function() {
-
               processSlides(slides, callback);
           });
       } else {
@@ -49,19 +49,28 @@ $(function(){
   }
 
   function loadDeck(name, callback) {
+
+      var fail = function() {
+          createSlide({
+              title: 'failed to load deck named "' + name + '".'
+          });
+          callback();
+      };
+
       $.ajax({
           method: 'GET',
           url: name + '/data',
           success: function (data) {
-              var slides = data.slides;
-              processSlides(slides, callback);
+              console.log(data);
+              if (data && data.slides) {
+                  var slides = data.slides;
+                  processSlides(slides, callback);
+              } else {
+                  fail();
+              }
           },
           failure: function () {
-              createSlide({
-                  title: 'failed to load deck named "' + name + '".'
-              });
-
-              callback();
+              fail();
           }
       });
   }
@@ -71,19 +80,10 @@ $(function(){
         overlay: "Welcome to Display Board"
     }).addClass('initial').appendTo($deck);
 
-    var jsonText = $('#configuration').html();
+    var deckName = $('#deck-name').html();
 
-    var data = JSON.parse(jsonText);
-      
-    if (data == null) {
-        $stage.html('<h1>deck not found</h1>');
-        return;
-    }
-
-    var slides = data.slides;
-
-    processSlides(slides, function () {
-        $initial = $deck.children().first();
+    loadDeck(deckName, function () {
+        var $initial = $deck.children().first();
         $initial.addClass('current');
         $initial.appendTo($stage);
 

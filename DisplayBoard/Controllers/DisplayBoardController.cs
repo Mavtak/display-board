@@ -59,9 +59,7 @@ namespace DisplayBoard.Controllers
 
         public ActionResult Display(string name)
         {
-            var model = GetConfiguration(name);
-
-            return View(model);
+            return View((object)name);
         }
 
         public ActionResult Data(string name)
