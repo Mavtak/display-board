@@ -27,44 +27,44 @@ $(function(){
     return result;
   }
   
-  function processSlides(slides, callback) {
+  function processSlides(slides, callback, results) {
+      results = results || [];
+
       if (slides.length === 0) {
-          callback();
+          callback(results);
           return;
       }
 
       var slide = slides.shift();
-      console.log(slide);
 
       if (slide.url && slide.url.indexOf('deck:') === 0) {
           var name = slide.url.split(':')[1];
           loadDeck(name, function() {
-              processSlides(slides, callback);
-          });
+              processSlides(slides, callback, results);
+          }, results);
       } else {
-        createSlide(slide);
-
-        processSlides(slides, callback);
+          results.push(slide);
+          processSlides(slides, callback, results);
       }
   }
 
-  function loadDeck(name, callback) {
+  function loadDeck(name, callback, results) {
+      results = results || [];
 
       var fail = function() {
-          createSlide({
+          results.push({
               title: 'failed to load deck named "' + name + '".'
           });
-          callback();
+          callback(results);
       };
 
       $.ajax({
           method: 'GET',
           url: name + '/data',
           success: function (data) {
-              console.log(data);
               if (data && data.slides) {
                   var slides = data.slides;
-                  processSlides(slides, callback);
+                  processSlides(slides, callback, results);
               } else {
                   fail();
               }
@@ -82,7 +82,10 @@ $(function(){
 
     var deckName = $('#deck-name').html();
 
-    loadDeck(deckName, function () {
+    loadDeck(deckName, function (slides) {
+        $.each(slides, (function (index, slide) {
+            createSlide(slide);
+        }));
         var $initial = $deck.children().first();
         $initial.addClass('current');
         $initial.appendTo($stage);
