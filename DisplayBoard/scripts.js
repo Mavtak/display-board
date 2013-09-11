@@ -5,6 +5,7 @@ $(function(){
   var $stage = $('#stage');
   var $deck = $('#slide-deck');
   var slideData = [];
+  var loadedSlides;
   
   function createSlide(data)
   {
@@ -83,6 +84,7 @@ $(function(){
     var deckName = $('#deck-name').html();
 
     loadDeck(deckName, function (slides) {
+        loadedSlides = slides;
         $.each(slides, (function (index, slide) {
             createSlide(slide);
         }));
@@ -96,6 +98,10 @@ $(function(){
         
         setTimeout(function () {
             cycle();
+        }, 1000);
+
+        setInterval(function () {
+            checkForChanges();
         }, 1000);
     });
   }
@@ -179,6 +185,41 @@ $(function(){
     
     setTimeout(afterAnimation, 3000);
   }
+
+  var checkForChanges = function () {
+      function reload() {
+          location.reload();
+      }
+      
+      var deckName = $('#deck-name').html();
+
+      loadDeck(deckName, function (freshSlides) {
+          if (loadedSlides.length != freshSlides.length) {
+              reload();
+              return;
+          }
+
+          for(var i = 0; i < loadedSlides.length; i++) {
+              var loadedSlide = loadedSlides[i];
+              var freshSlide = freshSlides[i];
+
+              if (freshSlide.title != loadedSlide.title) {
+                  reload();
+                  return;
+              }
+              
+              if (freshSlide.url != loadedSlide.url) {
+                  reload();
+                  return;
+              }
+              
+              if (freshSlide.timeout != loadedSlide.timeout) {
+                  reload();
+                  return;
+              }
+          }
+      });
+  };
 
   $(document).ready(function(){
     setup();
