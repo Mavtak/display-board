@@ -26,6 +26,12 @@ namespace DisplayBoard
             );
 
             routes.MapRoute(
+                name: "Utilities",
+                url: "Utilities/{action}",
+                defaults: new { controller = "Utilities"}
+            );
+
+            routes.MapRoute(
                 name: "Actions",
                 url: "{name}/{Action}",
                 defaults: new { controller = "DisplayBoard", Action = "Display"},
