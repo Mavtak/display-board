@@ -7,6 +7,20 @@ $(function(){
   var slideData = [];
   var loadedSlides;
   
+  function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+  }
+
+    function endsWithAny(str, suffixes) {
+        for (var i = 0; i < suffixes.length; i++) {
+            var suffix = suffixes[i];
+            if (endsWith(str, suffix)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
   function createSlide(data)
   {
     var id = 'slide-' + slideCount;
@@ -14,9 +28,15 @@ $(function(){
     var result = $('#slide-template').children('.slide').clone();
     result.attr('id', id);
 
-    if (data.url) {
+    var url = data.url;
+    if (url) {
+        
+        if (endsWithAny(url, ['.jpg', '.jpeg', '.png', '.gif'])) {
+            url = '/Utilities/DisplayImage?url=' + url;
+        }
+
         var content = $('.content', result);
-        content[0].src = data.url;
+        content[0].src = url;
     }
 
     var $title = $('.title', result);
