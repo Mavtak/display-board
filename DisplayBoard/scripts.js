@@ -20,53 +20,95 @@ $(function(){
         }
         return false;
     }
+    
+  var getContentType = function (url, callback) {
+      $.ajax({
+          method: 'GET',
+          url: '/Utilities/GetContentType',
+          data: {
+              url: url
+          },
+          success: function (type) {
+              callback(type);
+          },
+          error: function () {
+              callback();
+          }
+      });
+  };
 
-  function createSlide(data)
+  function createSlide(data, callback)
   {
     var id = 'slide-' + slideCount;
     slideCount++;
     var result = $('#slide-template').children('.slide').clone();
     result.attr('id', id);
 
-    var url = data.url;
-    if (url) {
-        
-        if (endsWithAny(url, ['.jpg', '.jpeg', '.png', '.gif'])) {
-            url = '/Utilities/DisplayImage?url=' + url;
-        }
-
-        var content = $('.content', result);
-        content[0].src = url;
-    }
-
     var $title = $('.title', result);
     $title.html(data.title);
-    
+
     result.appendTo($deck);
     slideData[id] = data;
-    
-    return result;
+
+    var url = data.url;
+    if (!url) {
+      if (callback) {
+        callback(result);
+      }
+      return;
+    }
+
+    var setUrl = function (type) {
+      type = type || '';
+      type = type.toLowerCase();
+
+      if (type.indexOf('image') == 0) {
+        url = '/Utilities/DisplayImage?url=' + url;
+      }
+
+      var content = $('.content', result);
+      content[0].src = url;
+
+      if (callback) {
+        callback(result);
+      }
+    };
+ 
+    var path = url;
+    if (url.indexOf('?') > 0) {
+      path = url.substring(0, url.indexOf('?'));
+    }
+      path = path.toLowerCase();
+    if (endsWithAny(path, ['.jpg', '.jpeg', '.png', '.gif']) || endsWith(url, "#image")) {
+        setUrl('image');
+    } else if (endsWithAny(path, ['.pdf']) || endsWith(url, "#pdf")) {
+      setUrl('application/pdf');
+    } else if (endsWithAny(path, ['.htm', '.html', '.aspx', '.php']) || endsWith(url, "#html")) {
+      setUrl('text/html');
+    } else {
+      getContentType(url, setUrl);
+    }
   }
-  
+
   function processSlides(slides, callback, results) {
-      results = results || [];
+    results = results || [];
 
-      if (slides.length === 0) {
-          callback(results);
-          return;
-      }
+    if (slides.length === 0) {
+      callback(results);
+      return;
+    }
 
-      var slide = slides.shift();
+    var slide = slides.shift();
 
-      if (slide.url && slide.url.indexOf('deck:') === 0) {
-          var name = slide.url.split(':')[1];
-          loadDeck(name, function() {
-              processSlides(slides, callback, results);
-          }, results);
-      } else {
-          results.push(slide);
-          processSlides(slides, callback, results);
-      }
+    if (slide.url && slide.url.indexOf('deck:') === 0) {
+        var name = slide.url.split(':')[1];
+        loadDeck(name, function() {
+            processSlides(slides, callback, results);
+        }, results);
+    } else {
+        results.push(slide);
+        processSlides(slides, callback, results);
+    }
   }
 
   function loadDeck(name, callback, results) {
@@ -99,30 +141,45 @@ $(function(){
   function setup() {
     createSlide({
         overlay: "Welcome to Display Board"
-    }).addClass('initial').appendTo($deck);
+    }, function($slide) {
+        $slide.addClass('initial');
+    });
 
     var deckName = $('#deck-name').html();
 
     loadDeck(deckName, function (slides) {
-        loadedSlides = slides;
-        $.each(slides, (function (index, slide) {
-            createSlide(slide);
-        }));
-        var $initial = $deck.children().first();
-        $initial.addClass('current');
-        $initial.appendTo($stage);
+        var startSlideshow = function() {
+            var $initial = $deck.children().first();
+            $initial.addClass('current');
+            $initial.appendTo($stage);
 
-        $next = $deck.children().first();
-        $next.addClass('next');
-        $next.appendTo($stage);
-        
-        setTimeout(function () {
-            cycle();
-        }, 1000);
+            $next = $deck.children().first();
+            $next.addClass('next');
+            $next.appendTo($stage);
 
-        setInterval(function () {
-            checkForChanges();
-        }, 1000);
+            setTimeout(function() {
+                cycle();
+            }, 1000);
+
+            setInterval(function() {
+                checkForChanges();
+            }, 1000);
+        };
+
+        var index = 0;
+        var createSlides = function() {
+            if (index == slides.length) {
+                startSlideshow();
+            }
+
+            var slide = slides[index];
+            index++;
+            
+            createSlide(slide, createSlides);
+        };
+
+        createSlides();
+
     });
   }
   
