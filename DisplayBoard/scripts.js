@@ -252,8 +252,8 @@ $(function(){
     step1();
 
     var step2 = function() {
-      $current.animate({left: "-100%"}, 1000);
-      $next.animate({left: 0}, 1000);
+      $current.animate({left: "-100%"}, 2000);
+      $next.animate({left: 0}, 2000);
     };
     setTimeout(step2, 1000);
 
@@ -261,9 +261,9 @@ $(function(){
       $frames.animate(zoomIn, 1000);
       $overlays.animate({opacity: 0}, 1000);
     };
-    setTimeout(step3, 2000);
+    setTimeout(step3, 3000);
     
-    setTimeout(afterAnimation, 3000);
+    setTimeout(afterAnimation, 4000);
   }
 
   var checkForChanges = function () {
