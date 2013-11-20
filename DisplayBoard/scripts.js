@@ -166,6 +166,8 @@ $(function(){
             }, 1000);
         };
 
+        loadedSlides = slides;
+
         var index = 0;
         var createSlides = function() {
             if (index == slides.length) {
