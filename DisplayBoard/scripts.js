@@ -205,11 +205,58 @@ $(function(){
       
       return timeout;
   }
-  
+
+  function zoomAndSlideTransition(done) {
+      var zoomOut = {
+          width: "90%",
+          height: "90%",
+          margin: "2.5%"
+      };
+
+      var zoomIn = {
+          width: "100%",
+          height: "100%",
+          margin: "0%"
+      };
+
+      var $overlays = $('.overlay', $stage);
+      var $frames = $('.frame', $stage);
+
+      var step1 = function () {
+          $frames.animate(zoomOut, 1000);
+          $overlays.animate({ opacity: 1 }, 1000);
+      };
+      step1();
+
+      var step2 = function () {
+          $current.animate({ left: "-100%" }, 2000);
+          $next.animate({ left: 0 }, 2000);
+      };
+      setTimeout(step2, 1000);
+
+      var step3 = function () {
+          $frames.animate(zoomIn, 1000);
+          $overlays.animate({ opacity: 0 }, 1000);
+      };
+      setTimeout(step3, 3000);
+
+      setTimeout(done, 4000);
+  }
+
+  function fadeTransition(done) {
+      $next.css('left', '0');
+      $current.animate({ opacity: 0 }, 2000);
+      setTimeout(done, 2000);
+  }
+
+  function cutTransition(done) {
+      done();
+  }
+
   function cycle() {
     $current = $stage.children('.current');
     $next = $stage.children('.next');
-    
+
     var afterAnimation = function() {
       $current.removeClass('current');
       $next.removeClass('next').addClass('current');
@@ -229,41 +276,8 @@ $(function(){
           cycle();
       }, timeout);
     };
-    
-    var zoomOut = {
-        width: "90%",
-        height: "90%",
-        margin: "2.5%"
-    };
-    
-    var zoomIn = {
-        width: "100%",
-        height: "100%",
-        margin: "0%"
-    };
-    
-    var $overlays = $('.overlay', $stage);
-    var $frames = $('.frame', $stage);
-    
-    var step1 = function() {
-      $frames.animate(zoomOut, 1000);
-      $overlays.animate({opacity: 1}, 1000);
-    };
-    step1();
 
-    var step2 = function() {
-      $current.animate({left: "-100%"}, 2000);
-      $next.animate({left: 0}, 2000);
-    };
-    setTimeout(step2, 1000);
-
-    var step3 = function() {
-      $frames.animate(zoomIn, 1000);
-      $overlays.animate({opacity: 0}, 1000);
-    };
-    setTimeout(step3, 3000);
-    
-    setTimeout(afterAnimation, 4000);
+    zoomAndSlideTransition(afterAnimation);
   }
 
   var checkForChanges = function () {
