@@ -170,6 +170,7 @@ $(function(){
         var createSlides = function() {
             if (index == slides.length) {
                 startSlideshow();
+                return;
             }
 
             var slide = slides[index];
