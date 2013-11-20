@@ -8,13 +8,13 @@
 
 <div id="slide-template">
     <p class="slide">
-        Url: <input class="url" type="text">
+        <span class="label">URL:</span><input class="url" type="text">
         <br />
-        Title: <input class="title" type="text"/>
+        <span class="label">Title:</span><input class="title" type="text"/>
         <br />
-        Timeout: <input class="timeout" type="text"/>
+        <span class="label">Timeout:</span><input class="timeout" type="text"/>
         <br />
-        <button class="remove">Remove</button>
+        <button class="remove">x</button>
     </p>
 </div>
 
@@ -39,6 +39,33 @@
     #submitPanel .message
     {
         display: none;
+    }
+
+    .slide
+    {
+        width: 500px;
+        border: 1px solid black;
+        background-color: whitesmoke;
+        position: relative;
+    }
+
+    .slide .label
+    {
+        display: inline-block;
+        width: 50px;
+        margin: 5px;
+    }
+
+    .slide input[type=text]
+    {
+        width: 425px;
+    }
+
+    .slide .remove
+    {
+        position: absolute;
+        right: -10px;
+        top: -10px;
     }
 
     #submitPanel .message
