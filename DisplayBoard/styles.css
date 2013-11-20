@@ -48,6 +48,7 @@ body
 #stage .slide .background
 {
 	text-align: left;
+    background-color: white;
 }
 
 #stage .slide .content
