@@ -244,10 +244,23 @@ $(function(){
   }
 
   function fadeTransition(done) {
-      $next.css('left', '0');
-      $current.animate({ opacity: 0 }, 2000);
-      setTimeout(done, 2000);
-  }
+      var $overlay = $('.overlay', $next);
+
+      $overlay.css('opacity', 1);
+
+      var step1 = function () {
+          $next.css('left', '0');
+          $current.animate({ opacity: 0 }, 2000);
+      };
+      step1();
+
+      var step2 = function () {
+          $overlay.animate({ opacity: 0 }, 1000);
+      };
+      setTimeout(step2, 3000);
+
+      setTimeout(done, 4000);
+  };
 
   function cutTransition(done) {
       done();
@@ -277,7 +290,7 @@ $(function(){
       }, timeout);
     };
 
-    zoomAndSlideTransition(afterAnimation);
+    fadeTransition(afterAnimation);
   }
 
   var checkForChanges = function () {
