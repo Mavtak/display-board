@@ -19,14 +19,50 @@
                 background-color: black;
                 text-align: center;
             }
-            img
+
+            html,
+            body
             {
-                max-width: 100%;
-                max-height: 100%;
+                overflow: hidden;
             }
+
         </style>
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js" type="text/javascript"></script>
     </head>
     <body>
         <img src="@Model"/>
+        <script type="text/javascript">
+            var $image = $('img');
+            var originalWidth = $image.width();
+            var originalHeight = $image.height();
+            var imageAspectRatio = originalWidth / originalHeight;
+
+            var sizeImage = function () {
+                $image.hide();
+                
+                var $frame = $('body');
+                var frameWidth = $frame.width();
+                var frameHeight = $frame.height();
+                var windowAspectRatio = frameWidth / frameHeight;
+
+                if (windowAspectRatio < imageAspectRatio) {
+                    $image.width(frameWidth);
+                    $image.height(frameWidth / imageAspectRatio);
+                    $image.css('margin-top', (frameHeight - (frameWidth / imageAspectRatio)) / 2);
+                } else {
+                    $image.width(frameHeight * imageAspectRatio);
+                    $image.height(frameHeight);
+                    $image.css('margin-top', '');
+                }
+                
+                $image.show();
+            };
+
+            sizeImage();
+            
+            $(window).resize(function() {
+                sizeImage();
+            })
+        </script>
     </body>
 </html>
